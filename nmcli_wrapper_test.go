@@ -28,3 +28,14 @@ func TestNmcliConnectionDown(t *testing.T)  {
         t.Errorf("There is output from the wifi_con_down func")
     }
 }
+
+func TestNmcliList(t *testing.T) {
+    // list here
+    something := wifi_list()
+    if something == nil {
+        t.Error("wifi list is empty")
+    }
+    for _, word := range( something) {
+        t.Logf("%s", word)
+    }
+}

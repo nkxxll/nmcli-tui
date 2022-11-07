@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
@@ -14,10 +15,30 @@ type netlistModel struct {
 	quitting bool
 }
 
+const (
+	defaultWidth = 20
+)
+
 func NewNetlistModel(netlist []string) tea.Model {
-    var m tea.Model
-    // TODO: implement
-    return m
+	var m netlistModel
+	// TODO: implement
+	var items []list.Item
+	for i, item := range wifi_list() {
+		if i != 0 {
+			items = append(items, Item(item))
+		}
+	}
+
+	l := list.New(items, itemDelegate{}, defaultWidth, listHeight)
+	l.Title = "WiFi Options list:"
+	l.SetShowStatusBar(false)
+	l.SetFilteringEnabled(false)
+	l.Styles.Title = titleStyle
+	l.Styles.PaginationStyle = paginationStyle
+	l.Styles.HelpStyle = helpStyle
+
+	m = netlistModel{list: l}
+	return m
 }
 
 func (m netlistModel) Init() tea.Cmd {
@@ -37,11 +58,19 @@ func (m netlistModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case "enter":
-        i, ok := m.list.SelectedItem().(item)
+			i, ok := m.list.SelectedItem().(Item)
 			if ok {
 				m.choice = string(i)
 			}
-        // TODO: here comes the nmcli logic
+			// TODO: here comes the nmcli logic
+			list := strings.Split(" ", strings.TrimSpace(strings.Trim("*", m.choice)))
+
+			// TODO: passwd with input model
+			// err := wifi_connect(passwd, list[2])
+			// if err != nil {
+			//     panic("There was an error while conntecting")
+			// }
+			fmt.Println("You chose: %s", list[2])
 			return m, tea.Quit
 		}
 	}

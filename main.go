@@ -22,9 +22,9 @@ var (
 	quitTextStyle     = lipgloss.NewStyle().Margin(1, 0, 2, 4)
 )
 
-type item string
+type Item string
 
-func (i item) FilterValue() string { return "" }
+func (i Item) FilterValue() string { return "" }
 
 type itemDelegate struct{}
 
@@ -32,7 +32,7 @@ func (d itemDelegate) Height() int                               { return 1 }
 func (d itemDelegate) Spacing() int                              { return 0 }
 func (d itemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
 func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-	i, ok := listItem.(item)
+	i, ok := listItem.(Item)
 	if !ok {
 		return
 	}
@@ -73,7 +73,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case "enter":
-			i, ok := m.list.SelectedItem().(item)
+			i, ok := m.list.SelectedItem().(Item)
 			if ok {
 				m.choice = string(i)
 			}
@@ -99,16 +99,16 @@ func (m model) View() string {
 
 func main() {
 	items := []list.Item{
-		item("Ramen"),
-		item("Tomato Soup"),
-		item("Hamburgers"),
-		item("Cheeseburgers"),
-		item("Currywurst"),
-		item("Okonomiyaki"),
-		item("Pasta"),
-		item("Fillet Mignon"),
-		item("Caviar"),
-		item("Just Wine"),
+		Item("Ramen"),
+		Item("Tomato Soup"),
+		Item("Hamburgers"),
+		Item("Cheeseburgers"),
+		Item("Currywurst"),
+		Item("Okonomiyaki"),
+		Item("Pasta"),
+		Item("Fillet Mignon"),
+		Item("Caviar"),
+		Item("Just Wine"),
 	}
 
 	const defaultWidth = 20
