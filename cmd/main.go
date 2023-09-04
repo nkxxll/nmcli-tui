@@ -89,6 +89,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	if m.choice != "" {
+    if m.choice == "Just Wine"{
+		return quitTextStyle.Render(fmt.Sprintf("%s? So we have a thirsty fellow here !.", m.choice))
+    }
 		return quitTextStyle.Render(fmt.Sprintf("%s? Sounds good to me.", m.choice))
 	}
 	if m.quitting {
