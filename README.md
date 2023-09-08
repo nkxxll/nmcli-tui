@@ -1,3 +1,8 @@
+
+# What is nmcli
+
+nmcli is a command-line tool for controlling NetworkManager and reporting network status. It can be utilized as a replacement for nm-applet or other graphical clients. nmcli is used to create, display, edit, delete, activate, and deactivate network connections, as well as control and display network device status. 
+
 # nmcli-tui
 
 ## What is nmcli-tui
