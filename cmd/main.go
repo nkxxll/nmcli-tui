@@ -51,7 +51,7 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 }
 
 type model struct {
-	list     list.Model
+	options  list.Model
 	choice   string
 	quitting bool
 }
@@ -63,7 +63,7 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.list.SetWidth(msg.Width)
+		m.options.SetWidth(msg.Width)
 		return m, nil
 
 	case tea.KeyMsg:
@@ -73,7 +73,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case "enter":
-			i, ok := m.list.SelectedItem().(Item)
+			i, ok := m.options.SelectedItem().(Item)
 			if ok {
 				m.choice = string(i)
 			}
@@ -83,52 +83,48 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	var cmd tea.Cmd
-	m.list, cmd = m.list.Update(msg)
+	m.options, cmd = m.options.Update(msg)
 	return m, cmd
 }
 
 func (m model) View() string {
-
+	// Of course here instead of matching on the Strings like here case Network ... we should match on i think command
+	// I guess something like command.listNetworks , command.connectToNetwork and so on ?
 	if m.choice != "" {
 		switch m.choice {
-		case "Just Wine":
-			return quitTextStyle.Render(fmt.Sprintf("%s? Okey thirsty boy!", m.choice))
+		case "Network List":
+			return quitTextStyle.Render(fmt.Sprint("Instead of this the programm should execute in the background the nmcli command and return a new view with the Network Connections that are possible !"))
+		case "Network Connect":
+			return quitTextStyle.Render(fmt.Sprintf("With this %s I am not sure what to do ?:)", m.choice))
+		case "Network Connect with Password":
+			return quitTextStyle.Render(fmt.Sprintf("With this %s I am not sure what to do ?:)", m.choice))
 		default:
 			return quitTextStyle.Render(fmt.Sprintf("%s? Sounds good to me.", m.choice))
-
 		}
 	}
 	if m.quitting {
-		return quitTextStyle.Render("Not hungry? That’s cool.")
+		return quitTextStyle.Render("Quiting NMCLI !")
 	}
-	return "\n" + m.list.View()
+	return "\n" + m.options.View()
 }
 
 func main() {
-	items := []list.Item{
-		Item("Ramen"),
-		Item("Tomato Soup"),
-		Item("Hamburgers"),
-		Item("Cheeseburgers"),
-		Item("Currywurst"),
-		Item("Okonomiyaki"),
-		Item("Pasta"),
-		Item("Fillet Mignon"),
-		Item("Caviar"),
-		Item("Just Wine"),
+	options := []list.Item{
+		Item("Network List"),
+		Item("Network Connect"),
+		Item("Network Connect With Password"),
 	}
-
 	const defaultWidth = 20
 
-	l := list.New(items, itemDelegate{}, defaultWidth, listHeight)
-	l.Title = "What do you want for dinner?"
+	l := list.New(options, itemDelegate{}, defaultWidth, listHeight)
+	l.Title = "NMCLI WRAPPER"
 	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(false)
 	l.Styles.Title = titleStyle
 	l.Styles.PaginationStyle = paginationStyle
 	l.Styles.HelpStyle = helpStyle
 
-	m := model{list: l}
+	m := model{options: l}
 
 	if err := tea.NewProgram(m).Start(); err != nil {
 		fmt.Println("Error running program:", err)
