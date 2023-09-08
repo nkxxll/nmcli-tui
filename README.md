@@ -4,7 +4,7 @@
 
 - a tui wrapper for nmcli
 - I want to be able to use a tui to accomplish network stuff in the command line
-with a tui interface to I do not have to learn the commands by heard
+  with a tui interface to I do not have to learn the commands by heard
 - also want it to look good :)
 
 ## Todo
@@ -13,7 +13,7 @@ with a tui interface to I do not have to learn the commands by heard
 
 ## Concept
 
-![Network Cli Concept Pic](./img/network-cli.svg) 
+![Network Cli Concept Pic](./assets/network-cli.svg)
 
 ## Password
 
@@ -23,6 +23,7 @@ Hide password while typing in go bubbletea-textinput.
 t.EchoMode = textinput.EchoPassword
 t.EchoCharacter = '•'
 ```
+
 ## Contribution
 
 I'd love people to contribute to this repo! No matter how experienced you are
@@ -32,6 +33,6 @@ open an issue.
 
 Test are also always welcome!
 
-*Last I want you to know I am not an English mother tongue hance if you find some
+_Last I want you to know I am not an English mother tongue hance if you find some
 grammar or spelling mistakes feel free to make a PR with the description spelling.
-Hope I can learn something :)*
+Hope I can learn something :)_
