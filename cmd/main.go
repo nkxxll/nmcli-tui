@@ -42,8 +42,8 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 	fn := itemStyle.Render
 	if index == m.Index() {
 		fn = func(s string) string {
-            // TODO: probably change to something nice
-			return selectedItemStyle.Render("> " + s)
+			// TODO: probably change to something nice
+			return selectedItemStyle.Render("-> " + s)
 		}
 	}
 
@@ -77,7 +77,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if ok {
 				m.choice = string(i)
 			}
-        // TODO: here comes the nmcli logic
+			// TODO: here comes the nmcli logic
 			return m, tea.Quit
 		}
 	}
@@ -88,8 +88,15 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
+
 	if m.choice != "" {
-		return quitTextStyle.Render(fmt.Sprintf("%s? Sounds good to me.", m.choice))
+		switch m.choice {
+		case "Just Wine":
+			return quitTextStyle.Render(fmt.Sprintf("%s? Okey thirsty boy!", m.choice))
+		default:
+			return quitTextStyle.Render(fmt.Sprintf("%s? Sounds good to me.", m.choice))
+
+		}
 	}
 	if m.quitting {
 		return quitTextStyle.Render("Not hungry? That’s cool.")
