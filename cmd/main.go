@@ -13,6 +13,24 @@ import (
 // TODO: not so nice should be relative
 const listHeight = 14
 
+// Here when adding style to the view maybe Create a struct instead of Variables ?ex:
+/**
+type Styles struct{
+  titleStyle        = lipgloss.Style
+	itemStyle         = lipgloss.Style
+	selectedItemStyle =  lipgloss.Style
+	paginationStyle   = lipgloss.Style
+	helpStyle         = lipgloss.Style
+	quitTextStyle     = lipgloss.Style
+}
+
+// than here we use the style struct to create a Default Style
+func DefaultStyles() *Styles{
+  s:= new(Styles)
+  s.titleStyle = lipgloss.NewStyle().MarginLeft(2)
+}
+
+*/
 var (
 	titleStyle        = lipgloss.NewStyle().MarginLeft(2)
 	itemStyle         = lipgloss.NewStyle().PaddingLeft(4)
@@ -92,12 +110,13 @@ func (m model) View() string {
 	// I guess something like command.listNetworks , command.connectToNetwork and so on ?
 	if m.choice != "" {
 		switch m.choice {
-		case "Network List":
+		case "List Networks":
+			// here we should not quit but render a new view with a list of the search results of the nmcli cmd
 			return quitTextStyle.Render(fmt.Sprint("Instead of this the programm should execute in the background the nmcli command and return a new view with the Network Connections that are possible !"))
-		case "Network Connect":
+		case "Connect to a Network":
 			return quitTextStyle.Render(fmt.Sprintf("With this %s I am not sure what to do ?:)", m.choice))
-		case "Network Connect with Password":
-			return quitTextStyle.Render(fmt.Sprintf("With this %s I am not sure what to do ?:)", m.choice))
+		case "Quit":
+			return quitTextStyle.Render(fmt.Sprintf("%s ... ? Have A nice day:)", m.choice))
 		default:
 			return quitTextStyle.Render(fmt.Sprintf("%s? Sounds good to me.", m.choice))
 		}
@@ -110,9 +129,9 @@ func (m model) View() string {
 
 func main() {
 	options := []list.Item{
-		Item("Network List"),
-		Item("Network Connect"),
-		Item("Network Connect With Password"),
+		Item("List Networks"),
+		Item("Connect to a Network"),
+		Item("Quit"),
 	}
 	const defaultWidth = 20
 
@@ -126,7 +145,7 @@ func main() {
 
 	m := model{options: l}
 
-	if err := tea.NewProgram(m).Start(); err != nil {
+	if err := tea.NewProgram(m, tea.WithAltScreen()).Start(); err != nil {
 		fmt.Println("Error running program:", err)
 		os.Exit(1)
 	}
